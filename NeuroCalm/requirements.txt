@@ -8,3 +8,4 @@ fpdf2
 joblib
 scipy
 plotly
+shap

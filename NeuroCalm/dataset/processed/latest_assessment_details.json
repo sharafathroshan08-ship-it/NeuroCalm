@@ -1,0 +1,33 @@
+{
+    "stress_score": 50.0,
+    "stress_level": "Moderate",
+    "top_factors": [
+        {
+            "name": "Breathing problems",
+            "effect": "Contributing to higher stress"
+        },
+        {
+            "name": "Noise level",
+            "effect": "Contributing to higher stress"
+        },
+        {
+            "name": "Headaches",
+            "effect": "Contributing to higher stress"
+        },
+        {
+            "name": "Study load",
+            "effect": "Contributing to higher stress"
+        },
+        {
+            "name": "Future career concerns",
+            "effect": "Contributing to higher stress"
+        }
+    ],
+    "recommendations": [
+        "Use a quieter place for study or relaxation.",
+        "Take short breaks from noisy environments.",
+        "Use calming music when appropriate.",
+        "Take regular breaks from prolonged screen or study sessions.",
+        "Stay hydrated and maintain regular meals."
+    ]
+}

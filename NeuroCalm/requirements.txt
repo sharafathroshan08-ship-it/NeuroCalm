@@ -7,3 +7,4 @@ seaborn
 fpdf2
 joblib
 scipy
+plotly

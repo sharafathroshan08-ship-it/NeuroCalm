@@ -269,73 +269,36 @@ def convert_answer(feature, answer, option_count):
 
 
 # ============================================================
-# START QUESTIONNAIRE
+# QUESTIONNAIRE HELPER
 # ============================================================
 
-print("=" * 60)
-print("              🧠 NEUROCALM")
-print("          STRESS ASSESSMENT")
-print("=" * 60)
+def run_questionnaire():
+    print("=" * 60)
+    print("              NEUROCALM")
+    print("          STRESS ASSESSMENT")
+    print("=" * 60)
 
-answers = []
+    answers = []
+    for i, (question, options) in enumerate(questions):
+        feature = features[i]
+        print(f"\n{i + 1}. {question}")
+        for j, option in enumerate(options, 1):
+            print(f"   {j}. {option}")
+        while True:
+            try:
+                answer = int(input(f"Your answer (1-{len(options)}): "))
+                if 1 <= answer <= len(options):
+                    answers.append(convert_answer(feature, answer, len(options)))
+                    break
+                print(f"Please enter a number between 1 and {len(options)}.")
+            except ValueError:
+                print("Please enter a valid number.")
 
-for i, (question, options) in enumerate(questions):
-
-    feature = features[i]
-
-    print(f"\n{i + 1}. {question}")
-
-    for j, option in enumerate(options, 1):
-        print(f"   {j}. {option}")
-
-    while True:
-
-        try:
-
-            answer = int(
-                input(
-                    f"Your answer (1-{len(options)}): "
-                )
-            )
-
-            if 1 <= answer <= len(options):
-
-                value = convert_answer(
-                    feature,
-                    answer,
-                    len(options)
-                )
-
-                answers.append(value)
-
-                break
-
-            print(
-                f"Please enter a number between "
-                f"1 and {len(options)}."
-            )
-
-        except ValueError:
-
-            print("Please enter a valid number.")
-
-
-# ============================================================
-# NORMALIZATION
-# ============================================================
-
-normalized_values = []
-
-for feature, value in zip(features, answers):
-
-    minimum, maximum = ranges[feature]
-
-    normalized = (
-        (value - minimum) /
-        (maximum - minimum)
-    )
-
-    normalized_values.append(normalized)
+    normalized_values = []
+    for feature, value in zip(features, answers):
+        minimum, maximum = ranges[feature]
+        normalized_values.append((value - minimum) / (maximum - minimum) if maximum != minimum else 0)
+    return analyze_stress(normalized_values)
 
 
 def analyze_stress(normalized_values):
@@ -494,6 +457,8 @@ def analyze_stress(normalized_values):
         "latest_assessment_details.json"
     )
 
+    os.makedirs(os.path.dirname(details_file), exist_ok=True)
+
     report_factors = []
 
     for feature, importance in top_factors:
@@ -549,33 +514,7 @@ def analyze_stress(normalized_values):
 }
 
 
-# ============================================================
-# STRESS TREND
-# ============================================================
-
-history_df = load_history()
-
-weekly_average = calculate_weekly_average(history_df)
-trend = calculate_trend(history_df)
-
-print("\n📈 YOUR STRESS TREND")
-print("---------------------------------------------")
-
-print(
-    f"Weekly Average : "
-    f"{weekly_average:.0f}%"
-)
-
-print(
-    f"Trend          : "
-    f"{trend}"
-)
-
-
-# ============================================================
-# END
-# ============================================================
-
-print("\n" + "=" * 60)
-print("       ✅ ASSESSMENT COMPLETED SUCCESSFULLY")
-print("=" * 60)
+if __name__ == "__main__":
+    result = run_questionnaire()
+    print("\nStress Score:", result["stress_score"])
+    print("Stress Level:", result["stress_level"])
